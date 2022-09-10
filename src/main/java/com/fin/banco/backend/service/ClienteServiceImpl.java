@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ClienteServiceImpl implements ClienteService{
@@ -27,14 +28,14 @@ public class ClienteServiceImpl implements ClienteService{
     @Transactional
     public ResponseEntity<ClienteResponse> crear(Cliente cliente) {
         ClienteResponse clienteResponse = new ClienteResponse();
-        List<Cliente> datos = new ArrayList<>();
+        List<Cliente> clienteList = new ArrayList<>();
         List<InfoRest> infoRestList = new ArrayList<>();
 
         try {
             Cliente clienteGuardado = clienteRepository.save(cliente);
             if (clienteGuardado != null){
-                datos.add(clienteGuardado);
-                clienteResponse.setDatos(datos);
+                clienteList.add(clienteGuardado);
+                clienteResponse.setDatos(clienteList);
             }else{
                 log.error("Error al crear Cliente");
                 infoRestList.add(new InfoRest(-1,"Cliente no creado","Respuesta NOK"));
@@ -42,7 +43,7 @@ public class ClienteServiceImpl implements ClienteService{
                 return new ResponseEntity<ClienteResponse>(clienteResponse, HttpStatus.BAD_REQUEST);
             }
         }catch (Exception e){
-            log.error("Error al crear categoria", e.getMessage());
+            log.error("Error al crear Cliente", e.getMessage());
             infoRestList.add(new InfoRest(-1,"Cliente no creado","Respuesta NOK"));
             clienteResponse.setInfoRestList(infoRestList);
             return new ResponseEntity<ClienteResponse>(clienteResponse, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -57,12 +58,78 @@ public class ClienteServiceImpl implements ClienteService{
     @Override
     @Transactional
     public ResponseEntity<ClienteResponse> editar(Cliente cliente, Long id) {
-        return null;
+        ClienteResponse clienteResponse = new ClienteResponse();
+        List<Cliente> clienteList = new ArrayList<>();
+        List<InfoRest> infoRestList = new ArrayList<>();
+
+        try{
+            Optional<Cliente> clienteBuscado = clienteRepository.findById(id);
+            if(clienteBuscado.isPresent()){
+                clienteBuscado.get().setNombre(cliente.getNombre());
+                clienteBuscado.get().setGenero(cliente.getGenero());
+                clienteBuscado.get().setEdad(cliente.getEdad());
+                clienteBuscado.get().setIdentificacion(cliente.getIdentificacion());
+                clienteBuscado.get().setDireccion(cliente.getDireccion());
+                clienteBuscado.get().setTelefono(cliente.getTelefono());
+                clienteBuscado.get().setClienteid(cliente.getClienteid());
+                clienteBuscado.get().setContrasena(cliente.getContrasena());
+                clienteBuscado.get().setEstado(cliente.getEstado());
+
+                Cliente clienteActualizar = clienteRepository.save(clienteBuscado.get());
+                if(clienteActualizar != null){
+                    clienteList.add(clienteActualizar);
+                    clienteResponse.setDatos(clienteList);
+                }else{
+                    log.error("Error al editar Cliente");
+                    infoRestList.add(new InfoRest(-1,"Cliente no editado","Respuesta NOK"));
+                    clienteResponse.setInfoRestList(infoRestList);
+                    return new ResponseEntity<ClienteResponse>(clienteResponse, HttpStatus.BAD_REQUEST);
+                }
+            }else{
+                log.error("Error al buscar Cliente");
+                infoRestList.add(new InfoRest(-1,"Cliente no encontrado","Respuesta NOK"));
+                clienteResponse.setInfoRestList(infoRestList);
+                return new ResponseEntity<ClienteResponse>(clienteResponse, HttpStatus.NOT_FOUND);
+            }
+        }catch (Exception e){
+            log.error("Error al editar Cliente", e.getMessage());
+            infoRestList.add(new InfoRest(-1,"Cliente no editado","Respuesta NOK"));
+            clienteResponse.setInfoRestList(infoRestList);
+            return new ResponseEntity<ClienteResponse>(clienteResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        infoRestList.add(new InfoRest(00,"Cliente editado","Respuesta OK"));
+        clienteResponse.setInfoRestList(infoRestList);
+
+        return new ResponseEntity<ClienteResponse>(clienteResponse, HttpStatus.OK);
     }
 
     @Override
     @Transactional
     public ResponseEntity<ClienteResponse> eliminar(Long id) {
-        return null;
+       ClienteResponse clienteResponse = new ClienteResponse();
+       List<InfoRest> infoRestList = new ArrayList<>();
+
+       try {
+           Optional<Cliente> clienteBuscado = clienteRepository.findById(id);
+           if(clienteBuscado.isPresent()){
+               clienteRepository.deleteById(id);
+           }else{
+               log.error("Error al buscar Cliente");
+               infoRestList.add(new InfoRest(-1,"Cliente no encontrado","Respuesta NOK"));
+               clienteResponse.setInfoRestList(infoRestList);
+               return new ResponseEntity<ClienteResponse>(clienteResponse, HttpStatus.NOT_FOUND);
+           }
+       }catch (Exception e){
+           log.error("Error al eliminar Cliente", e.getMessage());
+           infoRestList.add(new InfoRest(-1,"Cliente no eliminado","Respuesta NOK"));
+           clienteResponse.setInfoRestList(infoRestList);
+           return new ResponseEntity<ClienteResponse>(clienteResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+       }
+
+        infoRestList.add(new InfoRest(00,"Cliente eliminado","Respuesta OK"));
+        clienteResponse.setInfoRestList(infoRestList);
+
+        return new ResponseEntity<ClienteResponse>(clienteResponse, HttpStatus.OK);
     }
 }
