@@ -1,9 +1,7 @@
 package com.fin.banco.backend.service;
 
-import com.fin.banco.backend.model.Cliente;
 import com.fin.banco.backend.model.Cuenta;
 import com.fin.banco.backend.model.repository.CuentaRepository;
-import com.fin.banco.backend.response.ClienteResponse;
 import com.fin.banco.backend.response.CuentaResponse;
 import com.fin.banco.backend.response.InfoRest;
 import org.slf4j.Logger;

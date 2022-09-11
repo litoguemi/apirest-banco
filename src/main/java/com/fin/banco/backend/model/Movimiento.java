@@ -1,6 +1,8 @@
 package com.fin.banco.backend.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -19,8 +21,9 @@ public class Movimiento implements Serializable {
     private Double valor;
     private Double saldo;
 
-    @ManyToOne
-    @JoinColumn(name = "cuenta_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="cuenta_id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
     private Cuenta cuenta;
 
     public Long getId() {
@@ -61,5 +64,13 @@ public class Movimiento implements Serializable {
 
     public void setSaldo(Double saldo) {
         this.saldo = saldo;
+    }
+
+    public Cuenta getCuenta() {
+        return cuenta;
+    }
+
+    public void setCuenta(Cuenta cuenta) {
+        this.cuenta = cuenta;
     }
 }

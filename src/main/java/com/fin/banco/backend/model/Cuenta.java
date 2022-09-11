@@ -26,9 +26,6 @@ public class Cuenta implements Serializable {
     @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
     private Cliente cliente;
 
-    @OneToMany(mappedBy = "cuenta")
-    private List<Movimiento> movimientoList;
-
     public Long getId() {
         return id;
     }
@@ -76,11 +73,4 @@ public class Cuenta implements Serializable {
         this.cliente = cliente;
     }
 
-    public List<Movimiento> getMovimientoList() {
-        return movimientoList;
-    }
-
-    public void setMovimientoList(List<Movimiento> movimientoList) {
-        this.movimientoList = movimientoList;
-    }
 }
