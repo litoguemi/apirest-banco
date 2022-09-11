@@ -15,11 +15,16 @@ public class Cliente extends Persona{
     private String contrasena;
     private Boolean estado;
 
+    public Cliente() {
+    }
+
     public Cliente(Long id, String contrasena, Boolean estado) {
         this.id = id;
         this.contrasena = contrasena;
         this.estado = estado;
     }
+
+
 
     @Override
     public Long getId() {

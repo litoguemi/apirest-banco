@@ -20,6 +20,15 @@ public class Cuenta implements Serializable {
     private Double saldoInicial;
     private Boolean estado;
 
+    public Cuenta(){}
+
+    public Cuenta(Long id, String numeroCuenta, String tipoCuenta, Double saldoInicial, Boolean estado) {
+        this.id = id;
+        this.numeroCuenta = numeroCuenta;
+        this.tipoCuenta = tipoCuenta;
+        this.saldoInicial = saldoInicial;
+        this.estado = estado;
+    }
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="cliente_id")

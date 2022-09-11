@@ -26,6 +26,17 @@ public class Movimiento implements Serializable {
     @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
     private Cuenta cuenta;
 
+    public Movimiento() {
+    }
+
+    public Movimiento(Long id, LocalDateTime fecha, String tipoMovimiento, Double valor, Double saldo) {
+        this.id = id;
+        this.fecha = fecha;
+        this.tipoMovimiento = tipoMovimiento;
+        this.valor = valor;
+        this.saldo = saldo;
+    }
+
     public Long getId() {
         return id;
     }
