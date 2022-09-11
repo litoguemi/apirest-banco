@@ -14,6 +14,12 @@ public class ClienteController {
     @Autowired
     private ClienteService clienteService;
 
+
+    @GetMapping("/clientes")
+    public ResponseEntity<ClienteResponse> listar(){
+        ResponseEntity<ClienteResponse> response = clienteService.listar();
+        return response;
+    }
     @PostMapping("/clientes")
     public ResponseEntity<ClienteResponse> crear(@RequestBody Cliente cliente){
         ResponseEntity<ClienteResponse> response = clienteService.crear(cliente);

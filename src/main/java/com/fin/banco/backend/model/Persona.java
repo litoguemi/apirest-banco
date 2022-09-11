@@ -5,10 +5,12 @@ import java.io.Serializable;
 
 @Entity
 @Table (name = "Persona")
+@Inheritance( strategy = InheritanceType.JOINED)
 public class Persona implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "persona_id")
     private Long id;
 
     private String nombre;

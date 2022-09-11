@@ -25,6 +25,27 @@ public class ClienteServiceImpl implements ClienteService{
     private ClienteRepository clienteRepository;
 
     @Override
+    @Transactional(readOnly = true)
+    public ResponseEntity listar() {
+        ClienteResponse clienteResponse = new ClienteResponse();
+        List<InfoRest> infoRestList = new ArrayList<>();
+
+        try {
+            List<Cliente> clienteList = clienteRepository.findAll();
+            clienteResponse.setDatos(clienteList);
+        }catch (Exception e){
+            log.error("Error al consutar Clientes", e.getMessage());
+            infoRestList.add(new InfoRest(-1,"Error al consultar Clientes","Respuesta NOK"));
+            clienteResponse.setInfoRestList(infoRestList);
+            return new ResponseEntity<ClienteResponse>(clienteResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        infoRestList.add(new InfoRest(00,"Respuesta exitosa","Respuesta OK"));
+        clienteResponse.setInfoRestList(infoRestList);
+        return new ResponseEntity<ClienteResponse>(clienteResponse, HttpStatus.OK);
+    }
+
+    @Override
     @Transactional
     public ResponseEntity<ClienteResponse> crear(Cliente cliente) {
         ClienteResponse clienteResponse = new ClienteResponse();
@@ -71,7 +92,6 @@ public class ClienteServiceImpl implements ClienteService{
                 clienteBuscado.get().setIdentificacion(cliente.getIdentificacion());
                 clienteBuscado.get().setDireccion(cliente.getDireccion());
                 clienteBuscado.get().setTelefono(cliente.getTelefono());
-                clienteBuscado.get().setClienteid(cliente.getClienteid());
                 clienteBuscado.get().setContrasena(cliente.getContrasena());
                 clienteBuscado.get().setEstado(cliente.getEstado());
 

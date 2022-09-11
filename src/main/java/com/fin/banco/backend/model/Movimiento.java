@@ -11,12 +11,17 @@ public class Movimiento implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "movimiento_id")
     private Long id;
 
     private LocalDateTime fecha;
     private String tipoMovimiento;
     private Double valor;
     private Double saldo;
+
+    @ManyToOne
+    @JoinColumn(name = "cuenta_id")
+    private Cuenta cuenta;
 
     public Long getId() {
         return id;

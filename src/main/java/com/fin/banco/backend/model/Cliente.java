@@ -1,16 +1,17 @@
 package com.fin.banco.backend.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "Cliente")
+@PrimaryKeyJoinColumn(referencedColumnName ="persona_id")
 public class Cliente extends Persona{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "cliente_id")
     private Long id;
-
-    private String clienteid;
     private String contrasena;
     private Boolean estado;
 
@@ -23,15 +24,6 @@ public class Cliente extends Persona{
     public void setId(Long id) {
         this.id = id;
     }
-
-    public String getClienteid() {
-        return clienteid;
-    }
-
-    public void setClienteid(String clienteid) {
-        this.clienteid = clienteid;
-    }
-
     public String getContrasena() {
         return contrasena;
     }
