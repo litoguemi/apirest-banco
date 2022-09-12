@@ -14,4 +14,4 @@ API rest para gestion de cuentas de banco
 2. Se puede importar el archivo con datos de prueba en postman desde el archivo ubicado en la carpeta: ./src/main/resources/BancoRest.postman_collection.json
 
 ## Docker Imagen
-1. La imagen de docker se puede desargar en: https://hub.docker.com/repository/docker/litoguemi/apirest-banco
+1. La imagen de docker se puede descargar en: https://hub.docker.com/repository/docker/litoguemi/apirest-banco
