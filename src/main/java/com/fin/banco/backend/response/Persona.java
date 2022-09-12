@@ -1,24 +1,32 @@
-package com.fin.banco.backend.model;
+package com.fin.banco.backend.response;
 
-import javax.persistence.*;
 import java.io.Serializable;
 
-@Entity
-@Table (name = "Persona")
-@Inheritance( strategy = InheritanceType.JOINED)
 public class Persona implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "persona_id")
-    private Long id;
 
+    private static final long serialVersionUID = 1L;
+
+    private Long id;
     private String nombre;
     private String genero;
     private Integer edad;
-    private String  identificacion;
+    private String identificacion;
     private String direccion;
     private String telefono;
+
+    public Persona() {
+    }
+
+    public Persona(Long id, String nombre, String genero, Integer edad, String identificacion, String direccion, String telefono) {
+        this.id = id;
+        this.nombre = nombre;
+        this.genero = genero;
+        this.edad = edad;
+        this.identificacion = identificacion;
+        this.direccion = direccion;
+        this.telefono = telefono;
+    }
 
     public Long getId() {
         return id;

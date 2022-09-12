@@ -1,15 +1,15 @@
 package com.fin.banco.backend.service;
 
-import com.fin.banco.backend.model.Movimiento;
+import com.fin.banco.backend.response.Movimiento;
 import org.springframework.http.ResponseEntity;
 
 public interface MovimientoService {
 
-    public ResponseEntity listar();
+    ResponseEntity listar();
 
-    public ResponseEntity crear(Movimiento movimiento);
+    ResponseEntity crear(Movimiento movimiento);
 
-    public ResponseEntity editar(Movimiento movimiento, Long id);
+    ResponseEntity editar(Movimiento movimiento, Long id);
 
-    public ResponseEntity eliminar(Long id);
+    ResponseEntity eliminar(Long id);
 }

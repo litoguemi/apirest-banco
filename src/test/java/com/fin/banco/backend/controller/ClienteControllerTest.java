@@ -1,7 +1,7 @@
 package com.fin.banco.backend.controller;
 
-import com.fin.banco.backend.model.Cliente;
-import com.fin.banco.backend.response.ClienteResponse;
+import com.fin.banco.backend.model.ClienteDTO;
+import com.fin.banco.backend.response.Cliente;
 import com.fin.banco.backend.service.ClienteService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,11 +38,11 @@ public class ClienteControllerTest {
         MockHttpServletRequest request = new MockHttpServletRequest();
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
 
-        Cliente cliente = new Cliente(Long.valueOf(1),"1234",true);
+        Cliente cliente = new Cliente(Long.valueOf(1),"Marianela Montalvo","Femenino",52,"0202020202","Amazonas y  NNUU","097548965",1L,"1234",true);
 
         //Cuando encuentra el metodo crear, retorne la entidad de respuesta con estado OK
-        when(service.crear(any(Cliente.class))).thenReturn(new ResponseEntity<ClienteResponse>(HttpStatus.OK));
-        ResponseEntity<ClienteResponse> response = clienteController.crear(cliente);
+        when(service.crear(any(Cliente.class))).thenReturn(new ResponseEntity<Cliente>(HttpStatus.OK));
+        ResponseEntity<Cliente> response = clienteController.crear(cliente);
 
         Assertions.assertThat(response.getStatusCodeValue()).isEqualTo(200);
     }
@@ -53,11 +53,11 @@ public class ClienteControllerTest {
         MockHttpServletRequest request = new MockHttpServletRequest();
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
 
-        Cliente clienteModificado = new Cliente(Long.valueOf(1),"1234",false);
+        Cliente cliente = new Cliente(Long.valueOf(1),"Marianela Montalvo","Femenino",52,"0202020202","Amazonas y  NNUU","097548965",1L,"1234",false);
 
         //Cuando encuentra el metodo crear, retorne la entidad de respuesta con estado OK
-        when(service.editar(any(Cliente.class),any(Long.class))).thenReturn(new ResponseEntity<ClienteResponse>(HttpStatus.OK));
-        ResponseEntity<ClienteResponse> response = clienteController.editar(clienteModificado,1L);
+        when(service.editar(any(Cliente.class),any(Long.class))).thenReturn(new ResponseEntity<Cliente>(HttpStatus.OK));
+        ResponseEntity<Cliente> response = clienteController.editar(cliente,1L);
 
         Assertions.assertThat(response.getStatusCodeValue()).isEqualTo(200);
     }
@@ -68,12 +68,13 @@ public class ClienteControllerTest {
         MockHttpServletRequest request = new MockHttpServletRequest();
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
 
-        Cliente cliente = new Cliente(Long.valueOf(1),"1234",true);
+        Cliente cliente = new Cliente(Long.valueOf(1),"Marianela Montalvo","Femenino",52,"0202020202","Amazonas y  NNUU","097548965",1L,"1234",true);
 
         //Cuando encuentra el metodo crear, retorne la entidad de respuesta con estado OK
-        when(service.eliminar(any(Long.class))).thenReturn(new ResponseEntity<ClienteResponse>(HttpStatus.OK));
-        ResponseEntity<ClienteResponse> response = clienteController.eliminar(cliente.getId());
+        when(service.eliminar(any(Long.class))).thenReturn(new ResponseEntity<Cliente>(HttpStatus.OK));
+        ResponseEntity<Cliente> response = clienteController.eliminar(cliente.getId());
 
         Assertions.assertThat(response.getStatusCodeValue()).isEqualTo(200);
     }
+
 }

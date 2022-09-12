@@ -1,7 +1,6 @@
 package com.fin.banco.backend.controller;
 
-import com.fin.banco.backend.model.Cliente;
-import com.fin.banco.backend.response.ClienteResponse;
+import com.fin.banco.backend.response.Cliente;
 import com.fin.banco.backend.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,25 +15,25 @@ public class ClienteController {
 
 
     @GetMapping("/clientes")
-    public ResponseEntity<ClienteResponse> listar(){
-        ResponseEntity<ClienteResponse> response = clienteService.listar();
+    public ResponseEntity<Cliente> listar(){
+        ResponseEntity<Cliente> response = clienteService.listar();
         return response;
     }
     @PostMapping("/clientes")
-    public ResponseEntity<ClienteResponse> crear(@RequestBody Cliente cliente){
-        ResponseEntity<ClienteResponse> response = clienteService.crear(cliente);
+    public ResponseEntity<Cliente> crear(@RequestBody Cliente cliente){
+        ResponseEntity<Cliente> response = clienteService.crear(cliente);
         return response;
     }
 
     @PutMapping("/clientes/{id}")
-    public ResponseEntity<ClienteResponse> editar(@RequestBody Cliente cliente, @PathVariable Long id){
-        ResponseEntity<ClienteResponse> response = clienteService.editar(cliente,id);
+    public ResponseEntity<Cliente> editar(@RequestBody Cliente cliente, @PathVariable Long id){
+        ResponseEntity<Cliente> response = clienteService.editar(cliente,id);
         return response;
     }
 
     @DeleteMapping("/clientes/{id}")
-    public ResponseEntity<ClienteResponse> eliminar(@PathVariable Long id){
-        ResponseEntity<ClienteResponse> response = clienteService.eliminar(id);
+    public ResponseEntity<Cliente> eliminar(@PathVariable Long id){
+        ResponseEntity<Cliente> response = clienteService.eliminar(id);
         return response;
     }
 

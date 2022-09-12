@@ -1,9 +1,15 @@
 package com.fin.banco.backend.service;
 
-import com.fin.banco.backend.model.Cliente;
+
+import com.fin.banco.backend.model.ClienteDTO;
+import com.fin.banco.backend.model.PersonaDTO;
 import com.fin.banco.backend.model.repository.ClienteRepository;
-import com.fin.banco.backend.response.ClienteResponse;
+import com.fin.banco.backend.model.repository.PersonaRepository;
+import com.fin.banco.backend.response.Cliente;
 import com.fin.banco.backend.response.InfoRest;
+import com.fin.banco.backend.response.ResponseRest;
+import com.fin.banco.backend.service.mapper.EntityMapper;
+import com.fin.banco.backend.service.mapper.EntityMapperDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,132 +30,134 @@ public class ClienteServiceImpl implements ClienteService{
     @Autowired
     private ClienteRepository clienteRepository;
 
+    @Autowired
+    PersonaRepository personaRepository;
+
     @Override
     @Transactional(readOnly = true)
     public ResponseEntity listar() {
-        ClienteResponse clienteResponse = new ClienteResponse();
+        ResponseRest<Cliente> clienteResponse = new ResponseRest();
         List<InfoRest> infoRestList = new ArrayList<>();
-
+        List<Cliente> clienteList = new ArrayList<>();
         try {
-            List<Cliente> clienteList = clienteRepository.findAll();
+            List<ClienteDTO> clienteDTOList = clienteRepository.findAll();
+            clienteDTOList.stream().forEach(clienteDTO -> {
+                clienteList.add(EntityMapper.castClienteDTOtoCliente(clienteDTO));
+            });
             clienteResponse.setDatos(clienteList);
         }catch (Exception e){
             log.error("Error al consutar Clientes", e.getMessage());
             infoRestList.add(new InfoRest(-1,"Error al consultar Clientes","Respuesta NOK"));
             clienteResponse.setInfoRestList(infoRestList);
-            return new ResponseEntity<ClienteResponse>(clienteResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<ResponseRest>(clienteResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         infoRestList.add(new InfoRest(00,"Respuesta exitosa","Respuesta OK"));
         clienteResponse.setInfoRestList(infoRestList);
-        return new ResponseEntity<ClienteResponse>(clienteResponse, HttpStatus.OK);
+        return new ResponseEntity<ResponseRest>(clienteResponse, HttpStatus.OK);
     }
 
     @Override
     @Transactional
-    public ResponseEntity<ClienteResponse> crear(Cliente cliente) {
-        ClienteResponse clienteResponse = new ClienteResponse();
+    public ResponseEntity crear(Cliente cliente) {
+        ResponseRest<Cliente> clienteResponse = new ResponseRest<>();
         List<Cliente> clienteList = new ArrayList<>();
         List<InfoRest> infoRestList = new ArrayList<>();
 
         try {
-            Cliente clienteGuardado = clienteRepository.save(cliente);
+            Optional<PersonaDTO> personaGuardado = personaRepository.findById(cliente.getId());
+            if(!personaGuardado.isPresent()){
+                personaGuardado = Optional.of(personaRepository.save(EntityMapperDTO.castClienteToPersonaDTO(cliente)));
+            }
+            ClienteDTO clienteGuardado = clienteRepository.save(EntityMapperDTO.castClienteToClienteDTO(personaGuardado.get(),cliente));
             if (clienteGuardado != null){
-                clienteList.add(clienteGuardado);
+                clienteList.add(EntityMapper.castClienteDTOtoCliente(clienteGuardado));
                 clienteResponse.setDatos(clienteList);
             }else{
                 log.error("Error al crear Cliente");
                 infoRestList.add(new InfoRest(-1,"Cliente no creado","Respuesta NOK"));
                 clienteResponse.setInfoRestList(infoRestList);
-                return new ResponseEntity<ClienteResponse>(clienteResponse, HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<ResponseRest>(clienteResponse, HttpStatus.BAD_REQUEST);
             }
         }catch (Exception e){
             log.error("Error al crear Cliente", e.getMessage());
             infoRestList.add(new InfoRest(-1,"Cliente no creado","Respuesta NOK"));
             clienteResponse.setInfoRestList(infoRestList);
-            return new ResponseEntity<ClienteResponse>(clienteResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<ResponseRest>(clienteResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         infoRestList.add(new InfoRest(00,"Cliente creado","Respuesta OK"));
         clienteResponse.setInfoRestList(infoRestList);
 
-        return new ResponseEntity<ClienteResponse>(clienteResponse, HttpStatus.OK);
+        return new ResponseEntity<ResponseRest>(clienteResponse, HttpStatus.OK);
     }
 
     @Override
     @Transactional
-    public ResponseEntity<ClienteResponse> editar(Cliente cliente, Long id) {
-        ClienteResponse clienteResponse = new ClienteResponse();
+    public ResponseEntity editar(Cliente cliente, Long id) {
+        ResponseRest<Cliente> clienteResponse = new ResponseRest();
         List<Cliente> clienteList = new ArrayList<>();
         List<InfoRest> infoRestList = new ArrayList<>();
 
         try{
-            Optional<Cliente> clienteBuscado = clienteRepository.findById(id);
+            Optional<ClienteDTO> clienteBuscado = clienteRepository.findById(id);
             if(clienteBuscado.isPresent()){
-                clienteBuscado.get().setNombre(cliente.getNombre());
-                clienteBuscado.get().setGenero(cliente.getGenero());
-                clienteBuscado.get().setEdad(cliente.getEdad());
-                clienteBuscado.get().setIdentificacion(cliente.getIdentificacion());
-                clienteBuscado.get().setDireccion(cliente.getDireccion());
-                clienteBuscado.get().setTelefono(cliente.getTelefono());
-                clienteBuscado.get().setContrasena(cliente.getContrasena());
-                clienteBuscado.get().setEstado(cliente.getEstado());
-
-                Cliente clienteActualizar = clienteRepository.save(clienteBuscado.get());
+                ClienteDTO clienteActualizar = EntityMapperDTO.castClienteToClienteDTO(clienteBuscado.get(),cliente);
+                clienteActualizar = clienteRepository.save(clienteActualizar);
                 if(clienteActualizar != null){
-                    clienteList.add(clienteActualizar);
+                    clienteList.add(EntityMapper.castClienteDTOtoCliente(clienteActualizar));
                     clienteResponse.setDatos(clienteList);
                 }else{
                     log.error("Error al editar Cliente");
                     infoRestList.add(new InfoRest(-1,"Cliente no editado","Respuesta NOK"));
                     clienteResponse.setInfoRestList(infoRestList);
-                    return new ResponseEntity<ClienteResponse>(clienteResponse, HttpStatus.BAD_REQUEST);
+                    return new ResponseEntity<ResponseRest>(clienteResponse, HttpStatus.BAD_REQUEST);
                 }
             }else{
                 log.error("Error al buscar Cliente");
                 infoRestList.add(new InfoRest(-1,"Cliente no encontrado","Respuesta NOK"));
                 clienteResponse.setInfoRestList(infoRestList);
-                return new ResponseEntity<ClienteResponse>(clienteResponse, HttpStatus.NOT_FOUND);
+                return new ResponseEntity<ResponseRest>(clienteResponse, HttpStatus.NOT_FOUND);
             }
         }catch (Exception e){
             log.error("Error al editar Cliente", e.getMessage());
             infoRestList.add(new InfoRest(-1,"Cliente no editado","Respuesta NOK"));
             clienteResponse.setInfoRestList(infoRestList);
-            return new ResponseEntity<ClienteResponse>(clienteResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<ResponseRest>(clienteResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         infoRestList.add(new InfoRest(00,"Cliente editado","Respuesta OK"));
         clienteResponse.setInfoRestList(infoRestList);
 
-        return new ResponseEntity<ClienteResponse>(clienteResponse, HttpStatus.OK);
+        return new ResponseEntity<ResponseRest>(clienteResponse, HttpStatus.OK);
     }
 
     @Override
     @Transactional
-    public ResponseEntity<ClienteResponse> eliminar(Long id) {
-       ClienteResponse clienteResponse = new ClienteResponse();
+    public ResponseEntity eliminar(Long id) {
+        ResponseRest<Cliente> clienteResponse = new ResponseRest<>();
        List<InfoRest> infoRestList = new ArrayList<>();
 
        try {
-           Optional<Cliente> clienteBuscado = clienteRepository.findById(id);
+           Optional<ClienteDTO> clienteBuscado = clienteRepository.findById(id);
            if(clienteBuscado.isPresent()){
                clienteRepository.deleteById(id);
            }else{
                log.error("Error al buscar Cliente");
                infoRestList.add(new InfoRest(-1,"Cliente no encontrado","Respuesta NOK"));
                clienteResponse.setInfoRestList(infoRestList);
-               return new ResponseEntity<ClienteResponse>(clienteResponse, HttpStatus.NOT_FOUND);
+               return new ResponseEntity<ResponseRest>(clienteResponse, HttpStatus.NOT_FOUND);
            }
        }catch (Exception e){
            log.error("Error al eliminar Cliente", e.getMessage());
            infoRestList.add(new InfoRest(-1,"Cliente no eliminado","Respuesta NOK"));
            clienteResponse.setInfoRestList(infoRestList);
-           return new ResponseEntity<ClienteResponse>(clienteResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+           return new ResponseEntity<ResponseRest>(clienteResponse, HttpStatus.INTERNAL_SERVER_ERROR);
        }
 
         infoRestList.add(new InfoRest(00,"Cliente eliminado","Respuesta OK"));
         clienteResponse.setInfoRestList(infoRestList);
 
-        return new ResponseEntity<ClienteResponse>(clienteResponse, HttpStatus.OK);
+        return new ResponseEntity<ResponseRest>(clienteResponse, HttpStatus.OK);
     }
 }

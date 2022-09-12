@@ -1,14 +1,16 @@
 package com.fin.banco.backend.service;
 
-import com.fin.banco.backend.model.Cliente;
+import com.fin.banco.backend.response.Cliente;
 import org.springframework.http.ResponseEntity;
+
+import java.util.List;
 
 public interface ClienteService {
 
-    public ResponseEntity listar();
-    public ResponseEntity crear(Cliente cliente);
+    ResponseEntity listar();
+    ResponseEntity crear(Cliente cliente);
 
-    public ResponseEntity editar(Cliente cliente, Long id);
+    ResponseEntity editar(Cliente cliente, Long id);
 
-    public ResponseEntity eliminar(Long id);
+    ResponseEntity eliminar(Long id);
 }

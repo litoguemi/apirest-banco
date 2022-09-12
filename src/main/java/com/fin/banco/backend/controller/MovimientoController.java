@@ -1,7 +1,6 @@
 package com.fin.banco.backend.controller;
 
-import com.fin.banco.backend.model.Movimiento;
-import com.fin.banco.backend.response.MovimientoResponse;
+import com.fin.banco.backend.response.Movimiento;
 import com.fin.banco.backend.service.MovimientoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,26 +15,26 @@ public class MovimientoController {
 
 
     @GetMapping("/movimientos")
-    public ResponseEntity<MovimientoResponse> listar(){
-        ResponseEntity<MovimientoResponse> response = movimientoService.listar();
+    public ResponseEntity<Movimiento> listar(){
+        ResponseEntity<Movimiento> response = movimientoService.listar();
         return response;
     }
 
     @PostMapping("/movimientos")
-    public ResponseEntity<MovimientoResponse> crear(@RequestBody Movimiento movimiento){
-        ResponseEntity<MovimientoResponse> response = movimientoService.crear(movimiento);
+    public ResponseEntity<Movimiento> crear(@RequestBody Movimiento movimiento){
+        ResponseEntity<Movimiento> response = movimientoService.crear(movimiento);
         return response;
     }
 
     @PutMapping("/movimientos/{id}")
-    public ResponseEntity<MovimientoResponse> editar(@RequestBody Movimiento movimiento, @PathVariable Long id){
-        ResponseEntity<MovimientoResponse> response = movimientoService.editar(movimiento,id);
+    public ResponseEntity<Movimiento> editar(@RequestBody Movimiento movimiento, @PathVariable Long id){
+        ResponseEntity<Movimiento> response = movimientoService.editar(movimiento,id);
         return response;
     }
 
     @DeleteMapping("/movimientos/{id}")
-    public ResponseEntity<MovimientoResponse> eliminar ( @PathVariable Long id){
-        ResponseEntity<MovimientoResponse> response = movimientoService.eliminar(id);
+    public ResponseEntity<Movimiento> eliminar (@PathVariable Long id){
+        ResponseEntity<Movimiento> response = movimientoService.eliminar(id);
         return response;
     }
 }

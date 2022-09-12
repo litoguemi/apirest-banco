@@ -1,19 +1,14 @@
-package com.fin.banco.backend.model;
+package com.fin.banco.backend.response;
 
+import com.fin.banco.backend.model.MovimientoDTO;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "Movimiento")
 public class Movimiento implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "movimiento_id")
+    private static final long serialVersionUID = 1L;
+
     private Long id;
 
     private LocalDateTime fecha;
@@ -21,20 +16,20 @@ public class Movimiento implements Serializable {
     private Double valor;
     private Double saldo;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="cuenta_id")
-    @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
+    private Long cuentaId;
+
     private Cuenta cuenta;
 
     public Movimiento() {
     }
 
-    public Movimiento(Long id, LocalDateTime fecha, String tipoMovimiento, Double valor, Double saldo) {
+    public Movimiento(Long id, LocalDateTime fecha, String tipoMovimiento, Double valor, Double saldo, Long cuentaId) {
         this.id = id;
         this.fecha = fecha;
         this.tipoMovimiento = tipoMovimiento;
         this.valor = valor;
         this.saldo = saldo;
+        this.cuentaId = cuentaId;
     }
 
     public Long getId() {
@@ -75,6 +70,14 @@ public class Movimiento implements Serializable {
 
     public void setSaldo(Double saldo) {
         this.saldo = saldo;
+    }
+
+    public Long getCuentaId() {
+        return cuentaId;
+    }
+
+    public void setCuentaId(Long cuentaId) {
+        this.cuentaId = cuentaId;
     }
 
     public Cuenta getCuenta() {

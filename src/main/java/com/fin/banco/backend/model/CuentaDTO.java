@@ -4,11 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
 
 @Entity
 @Table(name = "Cuenta")
-public class Cuenta implements Serializable {
+public class CuentaDTO implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,9 +22,9 @@ public class Cuenta implements Serializable {
     private Double saldoInicial;
     private Boolean estado;
 
-    public Cuenta(){}
+    public CuentaDTO(){}
 
-    public Cuenta(Long id, String numeroCuenta, String tipoCuenta, Double saldoInicial, Boolean estado) {
+    public CuentaDTO(Long id, String numeroCuenta, String tipoCuenta, Double saldoInicial, Boolean estado) {
         this.id = id;
         this.numeroCuenta = numeroCuenta;
         this.tipoCuenta = tipoCuenta;
@@ -33,7 +35,7 @@ public class Cuenta implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="cliente_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
-    private Cliente cliente;
+    private ClienteDTO cliente;
 
     public Long getId() {
         return id;
@@ -74,11 +76,11 @@ public class Cuenta implements Serializable {
         this.estado = estado;
     }
 
-    public Cliente getCliente() {
+    public ClienteDTO getCliente() {
         return cliente;
     }
 
-    public void setCliente(Cliente cliente) {
+    public void setCliente(ClienteDTO cliente) {
         this.cliente = cliente;
     }
 

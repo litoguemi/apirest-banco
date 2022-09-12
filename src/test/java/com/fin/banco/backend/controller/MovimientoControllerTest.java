@@ -1,8 +1,6 @@
 package com.fin.banco.backend.controller;
 
-
-import com.fin.banco.backend.model.Movimiento;
-import com.fin.banco.backend.response.MovimientoResponse;
+import com.fin.banco.backend.response.Movimiento;
 import com.fin.banco.backend.service.MovimientoService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,11 +38,11 @@ public class MovimientoControllerTest {
         MockHttpServletRequest request = new MockHttpServletRequest();
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
 
-        Movimiento movimiento = new Movimiento(Long.valueOf(1), LocalDateTime.now(),"Retiro",-100.00,200.00);
+        Movimiento movimiento = new Movimiento(Long.valueOf(1), LocalDateTime.now(),"Retiro",-100.00,200.00,1L);
 
         //Cuando encuentra el metodo crear, retorne la entidad de respuesta con estado OK
-        when(service.crear(any(Movimiento.class))).thenReturn(new ResponseEntity<MovimientoResponse>(HttpStatus.OK));
-        ResponseEntity<MovimientoResponse> response = movimientoController.crear(movimiento);
+        when(service.crear(any(Movimiento.class))).thenReturn(new ResponseEntity<Movimiento>(HttpStatus.OK));
+        ResponseEntity<Movimiento> response = movimientoController.crear(movimiento);
 
         Assertions.assertThat(response.getStatusCodeValue()).isEqualTo(200);
     }
@@ -56,11 +54,11 @@ public class MovimientoControllerTest {
         MockHttpServletRequest request = new MockHttpServletRequest();
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
 
-        Movimiento movimientoModificado = new Movimiento(Long.valueOf(1), LocalDateTime.now(),"Retiro",-100.00,200.00);
+        Movimiento movimientoModificado = new Movimiento(Long.valueOf(1), LocalDateTime.now(),"Retiro",-100.00,200.00,1L);
 
         //Cuando encuentra el metodo crear, retorne la entidad de respuesta con estado OK
-        when(service.editar(any(Movimiento.class),any(Long.class))).thenReturn(new ResponseEntity<MovimientoResponse>(HttpStatus.OK));
-        ResponseEntity<MovimientoResponse> response = movimientoController.editar(movimientoModificado,1L);
+        when(service.editar(any(Movimiento.class),any(Long.class))).thenReturn(new ResponseEntity<Movimiento>(HttpStatus.OK));
+        ResponseEntity<Movimiento> response = movimientoController.editar(movimientoModificado,1L);
 
         Assertions.assertThat(response.getStatusCodeValue()).isEqualTo(200);
     }
@@ -71,12 +69,13 @@ public class MovimientoControllerTest {
         MockHttpServletRequest request = new MockHttpServletRequest();
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
 
-        Movimiento movimiento = new Movimiento(Long.valueOf(1), LocalDateTime.now(),"Retiro",-100.00,200.00);
+        Movimiento movimiento = new Movimiento(Long.valueOf(1), LocalDateTime.now(),"Retiro",-100.00,200.00,1L);
 
         //Cuando encuentra el metodo crear, retorne la entidad de respuesta con estado OK
-        when(service.eliminar(any(Long.class))).thenReturn(new ResponseEntity<MovimientoResponse>(HttpStatus.OK));
-        ResponseEntity<MovimientoResponse> response = movimientoController.eliminar(movimiento.getId());
+        when(service.eliminar(any(Long.class))).thenReturn(new ResponseEntity<Movimiento>(HttpStatus.OK));
+        ResponseEntity<Movimiento> response = movimientoController.eliminar(movimiento.getId());
 
         Assertions.assertThat(response.getStatusCodeValue()).isEqualTo(200);
     }
+    
 }
