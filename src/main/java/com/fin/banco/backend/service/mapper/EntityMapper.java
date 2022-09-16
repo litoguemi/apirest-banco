@@ -5,7 +5,7 @@ import com.fin.banco.backend.response.*;
 
 public class EntityMapper{
 
-       private static Cliente castPersonaDTOtoCliente(PersonaDTO personaDTO){
+       public static Cliente castPersonaDTOtoCliente(PersonaDTO personaDTO){
               Cliente cliente = new Cliente();
               cliente.setId(personaDTO.getId());
               cliente.setNombre(personaDTO.getNombre());

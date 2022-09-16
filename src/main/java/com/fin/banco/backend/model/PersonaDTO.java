@@ -22,6 +22,18 @@ public class PersonaDTO implements Serializable {
     private String direccion;
     private String telefono;
 
+    public PersonaDTO(){}
+
+    public PersonaDTO(Long id, String nombre, String genero, Integer edad, String identificacion, String direccion, String telefono) {
+        this.id = id;
+        this.nombre = nombre;
+        this.genero = genero;
+        this.edad = edad;
+        this.identificacion = identificacion;
+        this.direccion = direccion;
+        this.telefono = telefono;
+    }
+
     public Long getId() {
         return id;
     }
